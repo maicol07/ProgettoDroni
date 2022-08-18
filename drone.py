@@ -1,6 +1,6 @@
 from enum import Enum
 
-from utils import get_command
+from utils import get_command, unicode_input
 
 
 class Commands(Enum):
@@ -29,15 +29,16 @@ if __name__ == "__main__":
     def ask_ip():
         drone_ip = ""
         while re.match("192\.168\.1\.(25[0-4]|2[0-4]\d|1\d\d|[1-9]\d|[2-9])$", drone_ip) is None:
-            drone_ip = console.input(
-                "Enter drone IP address (must be in 192.168.1.X format, where X is a number between 2 and 254): "
-            )
+            drone_ip = unicode_input(
+                    console,
+                    "Enter drone IP address (must be in 192.168.1.X format, where X is a number between 2 and 254): "
+                )
         return drone_ip
 
     gateway = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     gateway_addr = ("localhost", 8811)
 
-    drone_id = console.input("Enter drone ID: ")
+    drone_id = unicode_input(console, "Enter drone ID: ")
     drone_ip = ask_ip()
     try:
         gateway.sendto(f"{Commands.READY} {drone_ip} {drone_id}".encode(), gateway_addr)

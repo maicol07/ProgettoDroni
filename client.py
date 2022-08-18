@@ -1,7 +1,7 @@
 import typing
 from enum import Enum
 
-from utils import get_command
+from utils import get_command, unicode_input
 
 
 class Commands(Enum):
@@ -111,8 +111,9 @@ if __name__ == "__main__":
                         choices.append(drone_data["id"])
                         choices.append(drone_ip)
 
-                    drone_ip = Prompt.ask("Enter drone ID or IP address", choices=choices)
-                    address = console.input("Enter the address to ship to: ")
+                    drone_ip = unicode_input(console, lambda: Prompt.ask("Enter drone ID or IP address", choices=choices))
+                    address = unicode_input(console, "Enter the address to ship to: ")
+
                     t = threading.Thread(target=send_shipment, args=(address, drone_ip))
                     t.start()
                 case "g":
